@@ -1,5 +1,15 @@
 import Phaser from 'phaser';
 import Carrot from '../game/carrot';
+import {
+    SceneKeys,
+    ImageAssets,
+    AudioAssets,
+    RegistryKeys,
+    GameConfig,
+    PlayerConfig,
+    PlatformConfig,
+    CloudConfig
+} from '../constants';
 
 export default class Game extends Phaser.Scene {
     private carrotCollected = 0;
@@ -12,7 +22,7 @@ export default class Game extends Phaser.Scene {
     private gameMusic!: Phaser.Sound.BaseSound;
 
     constructor() {
-        super({ key: 'game' });
+        super({ key: SceneKeys.Game });
     }
 
     init(): void {
@@ -20,44 +30,51 @@ export default class Game extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.setBaseURL('assets/');
-        this.load.image('background', 'Background/bg_layer1.png');
-        this.load.image('cloud', 'Enemies/cloud.png');
-        this.load.image('platform', 'Environment/ground_grass.png');
-        this.load.image('bunny-stand', 'Players/bunny1_stand.png');
-        this.load.image('bunny-jump', 'Players/bunny1_jump.png');
-        this.load.image('carrot', 'Items/carrot.png');
-        this.load.audio('jump', 'Audio/phaseJump2.ogg');
-        this.load.audio('collect', 'Audio/powerUp5.ogg');
-        this.load.audio('background-music', 'Audio/back-home.wav');
+        this.load.setBaseURL(GameConfig.AssetsBasePath);
+
+        // Load images
+        Object.values(ImageAssets).forEach(({ key, path }) => {
+            this.load.image(key, path);
+        });
+
+        // Load audio
+        Object.values(AudioAssets).forEach(({ key, path }) => {
+            this.load.audio(key, path);
+        });
 
         this.cursors = this.input.keyboard!.createCursorKeys();
     }
 
     create(): void {
-        this.add.image(240, 320, 'background').setScrollFactor(1, 0);
+        this.add.image(
+            GameConfig.Width / 2,
+            GameConfig.Height / 2,
+            ImageAssets.Background.key
+        ).setScrollFactor(1, 0);
 
         this.clouds = this.add.group();
-        for (let index = 0; index < 3; index++) {
-            const x = Phaser.Math.Between(0, 480);
-            const y = 250 * index;
-            this.clouds.add(this.add.image(x, y, 'cloud'));
+        for (let index = 0; index < CloudConfig.Count; index++) {
+            const x = Phaser.Math.Between(CloudConfig.SpawnXMin, CloudConfig.SpawnXMax);
+            const y = CloudConfig.SpacingY * index;
+            this.clouds.add(this.add.image(x, y, ImageAssets.Cloud.key));
         }
 
         this.platforms = this.physics.add.staticGroup();
 
-        for (let i = 0; i < 5; i++) {
-            const x = Phaser.Math.Between(80, 400);
-            const y = 150 * i;
+        for (let i = 0; i < PlatformConfig.Count; i++) {
+            const x = Phaser.Math.Between(PlatformConfig.SpawnXMin, PlatformConfig.SpawnXMax);
+            const y = PlatformConfig.SpacingY * i;
 
-            const platform = this.platforms.create(x, y, 'platform') as Phaser.Physics.Arcade.Sprite;
-            platform.setScale(0.5);
+            const platform = this.platforms.create(x, y, ImageAssets.Platform.key) as Phaser.Physics.Arcade.Sprite;
+            platform.setScale(PlatformConfig.Scale);
 
             const body = platform.body as Phaser.Physics.Arcade.StaticBody;
             body.updateFromGameObject();
         }
 
-        this.player = this.physics.add.sprite(240, 320, 'bunny-stand').setScale(0.5);
+        this.player = this.physics.add
+            .sprite(PlayerConfig.StartX, PlayerConfig.StartY, ImageAssets.BunnyStand.key)
+            .setScale(PlayerConfig.Scale);
         const playerBody = this.player.body as Phaser.Physics.Arcade.Body;
         playerBody.checkCollision.up = false;
         playerBody.checkCollision.left = false;
@@ -88,12 +105,12 @@ export default class Game extends Phaser.Scene {
             backgroundColor: '#f5a040'
         };
         this.carrotsCollectedText = this.add
-            .text(240, 10, 'Carrot: 0', style)
+            .text(GameConfig.Width / 2, 10, 'Carrots: 0', style)
             .setScrollFactor(0)
             .setOrigin(0.5, 0)
             .setDepth(1);
 
-        this.gameMusic = this.sound.add('background-music', { loop: true });
+        this.gameMusic = this.sound.add(AudioAssets.BackgroundMusic.key, { loop: true });
         this.gameMusic.play();
     }
 
@@ -102,9 +119,15 @@ export default class Game extends Phaser.Scene {
             const platform = child as Phaser.Physics.Arcade.Sprite;
             const scrollY = this.cameras.main.scrollY;
 
-            if (platform.y >= scrollY + 640) {
-                platform.y = scrollY - Phaser.Math.Between(80, 120);
-                platform.x = Phaser.Math.Between(40, 440);
+            if (platform.y >= scrollY + GameConfig.Height) {
+                platform.y = scrollY - Phaser.Math.Between(
+                    PlatformConfig.RecycleOffsetMin,
+                    PlatformConfig.RecycleOffsetMax
+                );
+                platform.x = Phaser.Math.Between(
+                    PlatformConfig.RecycleXMin,
+                    PlatformConfig.RecycleXMax
+                );
                 const body = platform.body as Phaser.Physics.Arcade.StaticBody;
                 body.updateFromGameObject();
                 this.addCarrotAbove(platform);
@@ -116,8 +139,11 @@ export default class Game extends Phaser.Scene {
             const cloud = child as Phaser.GameObjects.Image;
             const scrollY = this.cameras.main.scrollY;
 
-            if (cloud.y >= scrollY + 800) {
-                cloud.y = scrollY - Phaser.Math.Between(20, 60);
+            if (cloud.y >= scrollY + CloudConfig.RecycleThreshold) {
+                cloud.y = scrollY - Phaser.Math.Between(
+                    CloudConfig.RecycleOffsetMin,
+                    CloudConfig.RecycleOffsetMax
+                );
             }
             return true;
         });
@@ -126,20 +152,20 @@ export default class Game extends Phaser.Scene {
         const touchingDown = playerBody.touching.down;
 
         if (touchingDown) {
-            this.player.setVelocityY(-600);
-            this.player.setTexture('bunny-jump');
-            this.sound.play('jump');
+            this.player.setVelocityY(PlayerConfig.JumpVelocity);
+            this.player.setTexture(ImageAssets.BunnyJump.key);
+            this.sound.play(AudioAssets.Jump.key);
         }
 
         const vy = playerBody.velocity.y;
-        if (vy > 0 && this.player.texture.key !== 'bunny-stand') {
-            this.player.setTexture('bunny-stand');
+        if (vy > 0 && this.player.texture.key !== ImageAssets.BunnyStand.key) {
+            this.player.setTexture(ImageAssets.BunnyStand.key);
         }
 
         if (this.cursors.left.isDown && !touchingDown) {
-            this.player.setVelocityX(-200);
+            this.player.setVelocityX(-PlayerConfig.MoveSpeed);
         } else if (this.cursors.right.isDown && !touchingDown) {
-            this.player.setVelocityX(200);
+            this.player.setVelocityX(PlayerConfig.MoveSpeed);
         } else {
             this.player.setVelocityX(0);
         }
@@ -148,9 +174,9 @@ export default class Game extends Phaser.Scene {
 
         const bottomPlatform = this.findBottomMostPlatform();
         if (this.player.y > bottomPlatform.y + 200) {
-            this.registry.set('final-score', this.carrotsCollectedText.text);
+            this.registry.set(RegistryKeys.FinalScore, this.carrotsCollectedText.text);
             this.gameMusic.stop();
-            this.scene.start('game-over');
+            this.scene.start(SceneKeys.GameOver);
         }
     }
 
@@ -167,7 +193,7 @@ export default class Game extends Phaser.Scene {
 
     private addCarrotAbove(sprite: Phaser.GameObjects.Sprite): Carrot {
         const y = sprite.y - sprite.displayHeight;
-        const carrot = this.carrots.get(sprite.x, y, 'carrot') as Carrot;
+        const carrot = this.carrots.get(sprite.x, y, ImageAssets.Carrot.key) as Carrot;
 
         carrot.setActive(true);
         carrot.setVisible(true);
@@ -191,7 +217,7 @@ export default class Game extends Phaser.Scene {
         this.physics.world.disableBody(carrotSprite.body as Phaser.Physics.Arcade.Body);
 
         this.carrotCollected++;
-        this.sound.play('collect');
+        this.sound.play(AudioAssets.Collect.key);
         this.carrotsCollectedText.text = `Carrots: ${this.carrotCollected}`;
     }
 

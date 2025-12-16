@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a4541cc1-5f3b-43ff-a905-609b3099fc93" name="Changes" comment="Make the project buildable with Vite">
+    <list default="true" id="a4541cc1-5f3b-43ff-a905-609b3099fc93" name="Changes" comment="Rewrite the project in TypeScript">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/carrot.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scenes/game.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scenes/gameover.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/phaser.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/game.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/game.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scenes/gameover.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/scenes/gameover.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +34,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
@@ -55,6 +51,23 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -69,7 +82,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1765916592467</updated>
-      <workItem from="1765916593593" duration="822000" />
+      <workItem from="1765916593593" duration="2064000" />
     </task>
     <task id="LOCAL-00001" summary="Make the project buildable with Vite">
       <option name="closed" value="true" />
@@ -79,7 +92,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765916725364</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Rewrite the project in TypeScript">
+      <option name="closed" value="true" />
+      <created>1765917724402</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1765917724402</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -95,6 +116,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Make the project buildable with Vite" />
-    <option name="LAST_COMMIT_MESSAGE" value="Make the project buildable with Vite" />
+    <MESSAGE value="Rewrite the project in TypeScript" />
+    <option name="LAST_COMMIT_MESSAGE" value="Rewrite the project in TypeScript" />
   </component>
 </project>

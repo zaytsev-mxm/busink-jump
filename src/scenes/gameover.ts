@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
+import { SceneKeys, RegistryKeys } from '../constants';
 
 export default class GameOver extends Phaser.Scene {
     constructor() {
-        super('game-over');
+        super(SceneKeys.GameOver);
     }
 
     create(): void {
@@ -11,11 +12,11 @@ export default class GameOver extends Phaser.Scene {
 
         this.add.text(width * 0.5, height * 0.5, 'Game Over', { fontSize: '48px' }).setOrigin(0.5);
 
-        const finalScore = this.registry.get('final-score') as string;
+        const finalScore = this.registry.get(RegistryKeys.FinalScore) as string;
         this.add.text(width * 0.5, height * 0.25, finalScore, { fontSize: '48px' }).setOrigin(0.5);
 
         this.input.keyboard!.once('keydown-SPACE', () => {
-            this.scene.start('game');
+            this.scene.start(SceneKeys.Game);
         });
     }
 }
