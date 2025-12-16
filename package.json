@@ -7,9 +7,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "vite": "^7.3.0"
   }
 }

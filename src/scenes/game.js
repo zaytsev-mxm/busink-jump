@@ -1,4 +1,4 @@
-import Phaser from '../lib/phaser.js';
+import Phaser from 'phaser';
 import Carrot from '../game/carrot.js'
 
 export default class Game extends Phaser.Scene

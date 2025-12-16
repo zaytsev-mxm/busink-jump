@@ -1,4 +1,4 @@
-import Phaser from '../lib/phaser.js'
+import Phaser from 'phaser'
 
 export default class GameOver extends Phaser.Scene
 {
