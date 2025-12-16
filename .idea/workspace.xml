@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="890fd9bd-87d4-4589-98a1-21b4c9d2b1ea" name="Changes" comment="" />
+    <list default="true" id="890fd9bd-87d4-4589-98a1-21b4c9d2b1ea" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,12 +33,16 @@
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="36wRiqyRu53wj7yO4aLJdeS6A9E" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
@@ -65,6 +72,7 @@
       <updated>1765915778903</updated>
       <workItem from="1765915780042" duration="7000" />
       <workItem from="1765915816739" duration="39000" />
+      <workItem from="1765915864985" duration="256000" />
     </task>
     <servers />
   </component>
