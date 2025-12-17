@@ -40,6 +40,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            sudo mkdir -p /var/www/game
             sudo rm -rf /var/www/game/*
             sudo mv /tmp/deploy/* /var/www/game/
             sudo chown -R www-data:www-data /var/www/game/
