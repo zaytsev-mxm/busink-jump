@@ -21,12 +21,17 @@ export default class Game extends Phaser.Scene {
     private carrotsCollectedText!: Phaser.GameObjects.Text;
     private gameMusic!: Phaser.Sound.BaseSound;
 
+    // Touch/swipe controls
+    private touchStartX: number = 0;
+    private swipeDirection: 'left' | 'right' | 'none' = 'none';
+
     constructor() {
         super({ key: SceneKeys.Game });
     }
 
     init(): void {
         this.carrotCollected = 0;
+        this.swipeDirection = 'none';
     }
 
     preload(): void {
@@ -112,6 +117,31 @@ export default class Game extends Phaser.Scene {
 
         this.gameMusic = this.sound.add(AudioAssets.BackgroundMusic.key, { loop: true });
         this.gameMusic.play();
+
+        // Setup touch/swipe controls for mobile
+        this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+            this.touchStartX = pointer.x;
+            this.swipeDirection = 'none';
+        });
+
+        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+            if (!pointer.isDown) return;
+
+            const swipeThreshold = 30;
+            const deltaX = pointer.x - this.touchStartX;
+
+            if (deltaX < -swipeThreshold) {
+                this.swipeDirection = 'left';
+            } else if (deltaX > swipeThreshold) {
+                this.swipeDirection = 'right';
+            } else {
+                this.swipeDirection = 'none';
+            }
+        });
+
+        this.input.on('pointerup', () => {
+            this.swipeDirection = 'none';
+        });
     }
 
     update(): void {
@@ -162,9 +192,13 @@ export default class Game extends Phaser.Scene {
             this.player.setTexture(ImageAssets.BunnyStand.key);
         }
 
-        if (this.cursors.left.isDown && !touchingDown) {
+        // Handle both keyboard and swipe controls
+        const movingLeft = this.cursors.left.isDown || this.swipeDirection === 'left';
+        const movingRight = this.cursors.right.isDown || this.swipeDirection === 'right';
+
+        if (movingLeft && !touchingDown) {
             this.player.setVelocityX(-PlayerConfig.MoveSpeed);
-        } else if (this.cursors.right.isDown && !touchingDown) {
+        } else if (movingRight && !touchingDown) {
             this.player.setVelocityX(PlayerConfig.MoveSpeed);
         } else {
             this.player.setVelocityX(0);
