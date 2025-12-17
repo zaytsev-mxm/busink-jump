@@ -21,9 +21,8 @@ export default class Game extends Phaser.Scene {
     private carrotsCollectedText!: Phaser.GameObjects.Text;
     private gameMusic!: Phaser.Sound.BaseSound;
 
-    // Touch/swipe controls
-    private touchStartX: number = 0;
-    private swipeDirection: 'left' | 'right' | 'none' = 'none';
+    // Touch controls
+    private touchDirection: 'left' | 'right' | 'none' = 'none';
 
     constructor() {
         super({ key: SceneKeys.Game });
@@ -31,7 +30,7 @@ export default class Game extends Phaser.Scene {
 
     init(): void {
         this.carrotCollected = 0;
-        this.swipeDirection = 'none';
+        this.touchDirection = 'none';
     }
 
     preload(): void {
@@ -118,29 +117,14 @@ export default class Game extends Phaser.Scene {
         this.gameMusic = this.sound.add(AudioAssets.BackgroundMusic.key, { loop: true });
         this.gameMusic.play();
 
-        // Setup touch/swipe controls for mobile
+        // Setup touch controls for mobile - tap left/right side of screen to move
         this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
-            this.touchStartX = pointer.x;
-            this.swipeDirection = 'none';
-        });
-
-        this.input.on('pointermove', (pointer: Phaser.Input.Pointer) => {
-            if (!pointer.isDown) return;
-
-            const swipeThreshold = 30;
-            const deltaX = pointer.x - this.touchStartX;
-
-            if (deltaX < -swipeThreshold) {
-                this.swipeDirection = 'left';
-            } else if (deltaX > swipeThreshold) {
-                this.swipeDirection = 'right';
-            } else {
-                this.swipeDirection = 'none';
-            }
+            const screenCenter = this.scale.width / 2;
+            this.touchDirection = pointer.x < screenCenter ? 'left' : 'right';
         });
 
         this.input.on('pointerup', () => {
-            this.swipeDirection = 'none';
+            this.touchDirection = 'none';
         });
     }
 
@@ -192,9 +176,9 @@ export default class Game extends Phaser.Scene {
             this.player.setTexture(ImageAssets.BunnyStand.key);
         }
 
-        // Handle both keyboard and swipe controls
-        const movingLeft = this.cursors.left.isDown || this.swipeDirection === 'left';
-        const movingRight = this.cursors.right.isDown || this.swipeDirection === 'right';
+        // Handle both keyboard and touch controls
+        const movingLeft = this.cursors.left.isDown || this.touchDirection === 'left';
+        const movingRight = this.cursors.right.isDown || this.touchDirection === 'right';
 
         if (movingLeft && !touchingDown) {
             this.player.setVelocityX(-PlayerConfig.MoveSpeed);
