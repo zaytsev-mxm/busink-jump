@@ -105,7 +105,7 @@ export default class Game extends Phaser.Scene {
             backgroundColor: '#f5a040'
         };
         this.carrotsCollectedText = this.add
-            .text(GameConfig.Width / 2, 10, 'Carrots: 0', style)
+            .text(GameConfig.Width / 2, 10, 'Dreamies: 0', style)
             .setScrollFactor(0)
             .setOrigin(0.5, 0)
             .setDepth(1);
@@ -218,7 +218,7 @@ export default class Game extends Phaser.Scene {
 
         this.carrotCollected++;
         this.sound.play(AudioAssets.Collect.key);
-        this.carrotsCollectedText.text = `Carrots: ${this.carrotCollected}`;
+        this.carrotsCollectedText.text = `Dreamies: ${this.carrotCollected}`;
     }
 
     private findBottomMostPlatform(): Phaser.Physics.Arcade.Sprite {

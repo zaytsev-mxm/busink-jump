@@ -9,9 +9,9 @@ export const ImageAssets = {
     Background: { key: 'background', path: 'Background/bg_layer1.png' },
     Cloud: { key: 'cloud', path: 'Enemies/cloud.png' },
     Platform: { key: 'platform', path: 'Environment/ground_grass.png' },
-    BunnyStand: { key: 'bunny-stand', path: 'Players/bunny1_stand.png' },
-    BunnyJump: { key: 'bunny-jump', path: 'Players/bunny1_jump.png' },
-    Carrot: { key: 'carrot', path: 'Items/carrot.png' }
+    BunnyStand: { key: 'bunny-stand', path: 'Players/cat1_stand.png' },
+    BunnyJump: { key: 'bunny-jump', path: 'Players/cat1_jump.png' },
+    Carrot: { key: 'carrot', path: 'Items/dreamies.png' }
 } as const;
 
 // Audio asset keys and paths
